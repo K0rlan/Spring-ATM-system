@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean id="account1" class="kz.iitu.spring.demo.Account">
+        <property name="pin" value="1111"></property>
+        <property name="cash" value="150000.7"></property>
+        <property name="name" value="Koko"></property>
+    </bean>
+    <bean id="account2" class="kz.iitu.spring.demo.Account">
+        <property name="pin" value="1111"></property>
+        <property name="cash" value="150000.7"></property>
+        <property name="name" value="Koko"></property>
+    </bean>
+    <bean id="account3" class="kz.iitu.spring.demo.Account">
+        <property name="pin" value="1111"></property>
+        <property name="cash" value="150000.7"></property>
+        <property name="name" value="Koko"></property>
+    </bean>
+    <bean id="bankDatabase" class="kz.iitu.spring.demo.Bank" >
+        <property name = "bank">
+            <util:map map-class="java.util.HashMap">
+                <entry key = "1111" value-ref="account1" />
+                <entry key = "1112" value-ref="account2"/>
+                <entry key = "1113" value-ref="account3" />
+            </util:map>
+        </property>
+    </bean>
+</beans>
