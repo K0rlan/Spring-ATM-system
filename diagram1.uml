@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>kz.iitu.spring.demo.Account</OriginalElement>
+  <nodes>
+    <node x="0.0" y="0.0">kz.iitu.spring.demo.IBankService</node>
+    <node x="195.0" y="424.0">kz.iitu.spring.demo.Client</node>
+    <node x="297.0" y="0.0">kz.iitu.spring.demo.ATM</node>
+    <node x="0.0" y="192.0">kz.iitu.spring.demo.Bank</node>
+    <node x="0.0" y="424.0">kz.iitu.spring.demo.Account</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="kz.iitu.spring.demo.Bank" target="kz.iitu.spring.demo.IBankService">
+      <point x="0.0" y="-93.5" />
+      <point x="0.0" y="71.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="257.5" y="272.5" />
+  <SelectedNodes>
+    <node>kz.iitu.spring.demo.Account</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
