@@ -4,6 +4,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ATM {
     Scanner scanner = new Scanner(System.in);
@@ -19,7 +21,7 @@ public class ATM {
         double amount;
         String ans = "y";
         while(ans.equals("y")) {
-            System.out.println("1. Check cash\n2. Withdraw\n3. Top up");
+            System.out.println("1. Check cash\n2. Withdraw\n3. Top up\n4. Change pin code");
             int option = scanner.nextInt();
             switch (option) {
                 case 1:
@@ -34,6 +36,11 @@ public class ATM {
                     System.out.println("Enter amount of money: ");
                     amount = scanner.nextDouble();
                     System.out.println("Your cash: " + bank.topUp(amount, cardNumber));
+                    break;
+                case 4:
+                    System.out.println("Enter new pin code: ");
+                    int pin = scanner.nextInt();
+                    bank.changePin(cardNumber, pin);
                     break;
                 default:
                     System.out.println("Wrong option");
