@@ -1,16 +1,42 @@
 package kz.iitu.spring.demo;
 
 public class Account {
-    private int pin;
-    private double cash;
-    private String name;
 
-    public void setName(String name) {
+    private int cardNumber;
+    private int pin;
+    private String name;
+    private double cash;
+
+
+    public Account(int cardNumber, int pin, String name, double cash) {
+        this.cardNumber = cardNumber;
+        this.pin = pin;
         this.name = name;
+        this.cash = cash;
+    }
+
+    public int getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(int cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public int getPin() {
+        return pin;
     }
 
     public void setPin(int pin) {
         this.pin = pin;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public double getCash() {
@@ -19,22 +45,5 @@ public class Account {
 
     public void setCash(double cash) {
         this.cash = cash;
-    }
-
-    public int getPin() {
-        return pin;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return "Account{" +
-                "pin=" + pin +
-                ", cash=" + cash +
-                ", name='" + name + '\'' +
-                '}';
     }
 }

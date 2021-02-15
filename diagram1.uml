@@ -4,8 +4,8 @@
   <OriginalElement>kz.iitu.spring.demo.Account</OriginalElement>
   <nodes>
     <node x="0.0" y="0.0">kz.iitu.spring.demo.IBankService</node>
-    <node x="195.0" y="424.0">kz.iitu.spring.demo.Client</node>
     <node x="297.0" y="0.0">kz.iitu.spring.demo.ATM</node>
+    <node x="195.0" y="424.0">kz.iitu.spring.demo.Client</node>
     <node x="0.0" y="192.0">kz.iitu.spring.demo.Bank</node>
     <node x="0.0" y="424.0">kz.iitu.spring.demo.Account</node>
   </nodes>
