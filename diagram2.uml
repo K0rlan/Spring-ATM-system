@@ -3,22 +3,13 @@
   <ID>JAVA</ID>
   <OriginalElement>kz.iitu.spring.demo.Account</OriginalElement>
   <nodes>
-    <node x="173.04999999999998" y="0.0">kz.iitu.spring.demo.IBankService</node>
-    <node x="36.54999999999998" y="622.0">kz.iitu.spring.demo.Client</node>
     <node x="11.049999999999983" y="429.0">kz.iitu.spring.demo.ATM</node>
     <node x="0.0" y="192.0">kz.iitu.spring.demo.Bank</node>
     <node x="3.049999999999983" y="10.5">kz.iitu.spring.demo.Account</node>
   </nodes>
   <notes />
-  <edges>
-    <edge source="kz.iitu.spring.demo.Bank" target="kz.iitu.spring.demo.IBankService">
-      <point x="84.0" y="-93.5" />
-      <point x="210.0" y="167.0" />
-      <point x="299.04999999999995" y="167.0" />
-      <point x="0.0" y="71.0" />
-    </edge>
-  </edges>
-  <settings layout="Hierarchic Group" zoom="1.0" x="213.0" y="338.0" />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="1.0" x="125.5" y="391.0" />
   <SelectedNodes>
     <node>kz.iitu.spring.demo.Account</node>
   </SelectedNodes>
