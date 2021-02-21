@@ -2,10 +2,13 @@ package kz.iitu.spring.demo;
 
 import org.omg.PortableInterceptor.ACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+@Component
 public class Bank {
+    @Autowired
     private List<Account> accounts;
 
     public Bank() { }

@@ -1,14 +1,21 @@
 package kz.iitu.spring.demo;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.sql.*;
 import java.util.Scanner;
 
+@Component("bankService")
 public class ATM implements BankService{
     private Account account;
     private Bank bank;
     Connection connection;
     Scanner scanner = new Scanner(System.in);
 
+    @Autowired
     public ATM(Bank bank) {
         this.bank = bank;
     }
@@ -104,7 +111,7 @@ public class ATM implements BankService{
         System.out.println("You successfully changed your pin code: " + this.account.getPin());
     }
 
-
+    @PostConstruct
     public void init() throws SQLException {
         Connection connection = this.create_DBCon();
         ResultSet set = null;
@@ -141,7 +148,7 @@ public class ATM implements BankService{
     public Bank getBank() {
         return this.bank;
     }
-
+    @PreDestroy
     public void destroy() {
         try {
             connection.close();

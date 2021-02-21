@@ -1,5 +1,8 @@
 package kz.iitu.spring.demo;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Account {
 
     private int cardNumber;
@@ -7,6 +10,8 @@ public class Account {
     private String name;
     private double cash;
 
+    public Account() {
+    }
 
     public Account(int cardNumber, int pin, String name, double cash) {
         this.cardNumber = cardNumber;
