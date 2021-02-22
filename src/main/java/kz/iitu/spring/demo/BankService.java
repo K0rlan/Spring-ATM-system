@@ -4,13 +4,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public interface BankService {
-    void showMenu(Account account);
-    Double checkCash();
-
-    double withdraw(double cash);
-    double topUp(double cash);
-    void changePin(int pin);
-
-    Bank getBank();
-
+    boolean withdrawal(double sum, int id);
+    boolean deposit(double sum, int id);
+    void checkBalance(int cash);
+    boolean changePin(int id, int pin, int newPin);
 }
+

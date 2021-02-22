@@ -1,166 +1,94 @@
 package kz.iitu.spring.demo;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import java.sql.*;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import java.util.Scanner;
 
-@Component("bankService")
-public class ATM implements BankService{
-    private Account account;
-    private Bank bank;
-    Connection connection;
-    Scanner scanner = new Scanner(System.in);
+public class ATM {
+    static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 
-    @Autowired
-    public ATM(Bank bank) {
-        this.bank = bank;
+    private static final Scanner scanner = new Scanner(System.in);
+    private static Bank bank = new Bank();
+    private static Service accountService;
+
+    public static void start(){
+        context.scan("kz.iitu.spring.demo");
+        context.refresh();
+        accountService = context.getBean("bankService", Service.class);
+        bank.setAccounts(accountService.getAccounts());
+        startMenu();
     }
-    Statement statement;
-
-    @Override
-    public void showMenu(Account account){
-        this.account = account;
-        double amount;
-        String ans = "y";
-        while(ans.equals("y")) {
-            System.out.println("1. Check cash\n2. Withdraw\n3. Top up\n4. Change pin code");
-            int option = scanner.nextInt();
-            switch (option) {
-                case 1:
-                    System.out.println("Your cash: " + checkCash());
-                    break;
-                case 2:
-                    System.out.println("Enter amount of money: ");
-                    amount = scanner.nextDouble();
-                    System.out.println("Your cash: " + withdraw(amount));
-                    break;
-                case 3:
-                    System.out.println("Enter amount of money: ");
-                    amount = scanner.nextDouble();
-                    System.out.println("Your cash: " + topUp(amount));
-                    break;
-                case 4:
-                    System.out.println("Enter new pin code: ");
-                    int pin = scanner.nextInt();
-                    changePin(pin);
-                    break;
-                default:
-                    System.out.println("Wrong option");
-
+    public static void startMenu(){
+        System.out.println("Enter card id:");
+        int id = scanner.nextInt();
+        System.out.println("Enter pin: ");
+        int pin = scanner.nextInt();
+        Account account = bank.checkPin(id, pin);
+        if (account != null){
+            while(true){
+                menu(account);
             }
-            System.out.println("Do you want to continue? y/n");
-            ans = scanner.next();
+        }else{
+            System.out.println("Wrong pin or card id");
+            startMenu();
+        }
+        context.close();
+    }
+
+    private static void menu(Account account) {
+        System.out.println("1. Top up\n" +
+                "2. Withdrawal\n" +
+                "3. Check balance\n" +
+                "4. Change pin\n" +
+                "5. Exit");
+        int choice = scanner.nextInt();
+        double amount = 0;
+        switch (choice){
+            case 1:
+                System.out.println("Enter the sum: ");
+                amount = scanner.nextDouble();
+                if (bank.deposit(amount, account.getId())){
+                    accountService.updateAccounts(account);
+                }
+                break;
+            case 2:
+                System.out.println("Enter the sum: ");
+                amount = scanner.nextDouble();
+                if (bank.withdrawal(amount, account.getId())){
+                    accountService.updateAccounts(account);
+                }
+                break;
+            case 3:
+                bank.checkBalance(account.getId());
+                break;
+            case 4:
+                if (changePin(account.getId())){
+                    accountService.updateAccounts(account);
+                }
+                break;
+            case 5:
+                System.exit(0);
+                break;
         }
     }
 
-    @Override
-    public Double checkCash() {
-        return this.account.getCash();
-    }
-
-    @Override
-    public double withdraw(double cash) {
-        if (cash > account.getCash()) {
-            System.out.println("You don't have enough money.");
-            System.out.println("Your cash: " + checkCash());
+    private static boolean changePin(int id) {
+        System.out.println("Enter your old pin:");
+        int old = scanner.nextInt();
+        System.out.println("Enter your new pin:");
+        int newPin = scanner.nextInt();
+        System.out.println("Repeat new pin:");
+        int repeat = scanner.nextInt();
+        if (newPin == repeat && bank.changePin(id, old, newPin)){
+            System.out.println("Your pin was successfully changed!");
+            return true;
+        }else if(newPin == repeat && !bank.changePin(id, old, newPin)){
+            System.out.println("Your old id incorrect. Please, try again!");
+            changePin(id);
+        }else{
+            System.out.println("Password doesn't match. Please, try again!");
+            changePin(id);
         }
-        else {
-            double total = account.getCash() - cash;
-            this.account.setCash(total);
-            try {
-                String query = "UPDATE accounts SET cash = '" + total + "' WHERE cardNumber = " + account.getCardNumber();
-                statement = connection.createStatement();
-                statement.executeUpdate(query);
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        }
-        return checkCash();
-    }
-
-    @Override
-    public double topUp(double cash) {
-        try {
-            Double total = account.getCash() + cash;
-            String query = "UPDATE accounts SET cash = '" + total + "' WHERE cardNumber = " + account.getCardNumber();
-            statement = connection.createStatement();
-            statement.executeUpdate(query);
-        }
-        catch (Exception e){
-            System.out.println(e);
-        }
-        this.account.setCash(this.account.getCash() + cash);
-        return checkCash();
-    }
-
-    @Override
-    public void changePin(int pin) {
-        try {
-            String query = "UPDATE accounts SET pin = '" + pin + "' WHERE cardNumber = " + account.getCardNumber();
-            statement = connection.createStatement();
-            statement.executeUpdate(query);
-            this.account.setPin(pin);
-        }
-        catch (Exception e){
-            System.out.println(e);
-        }
-        System.out.println("You successfully changed your pin code: " + this.account.getPin());
-    }
-
-    @PostConstruct
-    public void init() throws SQLException {
-        Connection connection = this.create_DBCon();
-        ResultSet set = null;
-        String query = "SELECT * FROM accounts";
-        statement = connection.createStatement();
-        set = statement.executeQuery(query);
-        while (set.next()){
-            Account account = new Account(set.getInt(1), set.getInt(2),
-                    set.getString(3), set.getDouble(4));
-            bank.getAccounts().add(account);
-        }
-    }
-
-
-    public Connection create_DBCon() {
-
-        try {
-            Class.forName("org.postgresql.Driver");
-            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/atm", "postgres", "1234");
-            if (connection != null) {
-                System.out.println("Connected");
-            }
-            else {
-                System.out.println("Connection failed");
-            }
-        }
-        catch (Exception e){
-            System.out.println(e);
-        }
-        return connection;
-    }
-
-    @Override
-    public Bank getBank() {
-        return this.bank;
-    }
-    @PreDestroy
-    public void destroy() {
-        try {
-            connection.close();
-            if (connection != null) {
-                System.out.println("Connection closed");
-            }
-            else {
-                System.out.println("Error closing connection");
-            }
-        }
-        catch (Exception e){
-            System.out.println(e);
-        }
+        return false;
     }
 }
